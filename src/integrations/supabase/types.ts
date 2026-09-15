@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      plans_tresorerie: {
+        Row: {
+          created_at: string
+          decaissements: Json
+          encaissements: Json
+          exercice: number
+          id: string
+          institution: string
+          periode: string
+          solde_initial: number
+          statut: string
+          unite_monetaire: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          decaissements?: Json
+          encaissements?: Json
+          exercice: number
+          id?: string
+          institution?: string
+          periode?: string
+          solde_initial?: number
+          statut?: string
+          unite_monetaire?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          decaissements?: Json
+          encaissements?: Json
+          exercice?: number
+          id?: string
+          institution?: string
+          periode?: string
+          solde_initial?: number
+          statut?: string
+          unite_monetaire?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
