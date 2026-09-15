@@ -77,11 +77,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Plan de Trésorerie CAPEF" },
+      {
+        name: "description",
+        content:
+          "Outil institutionnel de planification de la trésorerie annuelle de la CAPEF (Cameroun).",
+      },
+      { name: "author", content: "CAPEF" },
+      { property: "og:title", content: "Plan de Trésorerie CAPEF" },
+      {
+        property: "og:description",
+        content: "Planification de la trésorerie annuelle de la CAPEF, en FCFA.",
+      },
+      { property: "og:locale", content: "fr_FR" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
