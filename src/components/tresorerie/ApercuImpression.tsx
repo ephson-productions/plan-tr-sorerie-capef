@@ -9,6 +9,7 @@ import {
 } from "@/lib/tresorerie";
 import type { Grille, SituationTresorerie } from "@/lib/tresorerie";
 import { TableauSituation } from "./TableauSituation";
+import enteteOfficiel from "@/assets/entete-officiel-capef.png.asset.json";
 
 function TableauLecture({
   titre,
@@ -106,10 +107,11 @@ export function ApercuImpression({
 }) {
   return (
     <div className="zone-impression bg-white p-6 text-foreground">
-      {/* Zone réservée à l'en-tête officiel CAPEF (image pleine largeur). */}
-      <div className="flex h-24 w-full items-center justify-center border border-dashed border-accent text-center text-xs text-muted-foreground">
-        Zone réservée à l'en-tête officiel CAPEF (image bilingue pleine largeur)
-      </div>
+      <img
+        src={enteteOfficiel.url}
+        alt="En-tête officiel bilingue de la CAPEF"
+        className="mx-auto block h-auto w-full object-contain"
+      />
 
       <div className="mt-4 text-center">
         <h1 className="font-serif text-xl font-bold tracking-wide text-primary uppercase">

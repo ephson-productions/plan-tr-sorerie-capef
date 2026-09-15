@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import logoCapef from "@/assets/logo-capef.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -68,6 +69,11 @@ function PageConnexion() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <div className="w-full max-w-md border border-border bg-card p-8">
+        <img
+          src={logoCapef.url}
+          alt="Logo de la CAPEF"
+          className="mx-auto mb-5 h-32 w-auto object-contain"
+        />
         <p className="text-center text-xs font-medium tracking-[0.2em] text-accent uppercase">
           République du Cameroun
         </p>
