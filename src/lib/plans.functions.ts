@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { POSTES_DECAISSEMENTS, POSTES_ENCAISSEMENTS, grilleVide } from "./tresorerie";
 
-const grilleSchema = z.array(z.array(z.number())).optional();
+const grilleSchema = z.array(z.array(z.number()));
 
 const planSchema = z.object({
   id: z.string().uuid(),
