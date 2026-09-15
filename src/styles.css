@@ -144,3 +144,46 @@
     color: var(--color-foreground);
   }
 }
+
+/* ------------------------------------------------------------------
+ * Impression : A4 paysage, marges 8mm, seule la zone d'aperçu sort.
+ * ------------------------------------------------------------------ */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  .sans-impression {
+    display: none !important;
+  }
+
+  .zone-impression {
+    display: block !important;
+    position: static;
+    width: 100%;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .zone-impression table {
+    page-break-inside: auto;
+    font-size: 7.5pt;
+  }
+
+  .zone-impression tr,
+  .zone-impression thead {
+    page-break-inside: avoid;
+  }
+
+  .bloc-impression {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
