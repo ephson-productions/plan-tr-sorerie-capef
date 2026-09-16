@@ -47,7 +47,7 @@ export const chargerPlan = createServerFn({ method: "GET" })
 
 export const creerPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { exercice: number; nom?: string }) =>
+  .inputValidator((input: { exercice: number; nom?: string | undefined }) =>
     z
       .object({
         exercice: z.number().int().min(2000).max(2100),
