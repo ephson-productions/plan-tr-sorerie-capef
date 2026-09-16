@@ -122,10 +122,11 @@ function PageListePlans() {
           </div>
           <Button
             onClick={() =>
-              creation.mutate({
-                exercice: Number(nouvelExercice),
-                nom: nouveauNom.trim() || undefined,
-              })
+              creation.mutate(
+                nouveauNom.trim()
+                  ? { exercice: Number(nouvelExercice), nom: nouveauNom.trim() }
+                  : { exercice: Number(nouvelExercice) },
+              )
             }
             disabled={creation.isPending}
           >
