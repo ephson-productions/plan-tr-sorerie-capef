@@ -22,7 +22,7 @@ export function GrilleSaisie({
     <section>
       <h2 className="font-serif text-xl font-bold text-primary">{titre}</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Montants en {uniteMonetaire}. Les totaux se recalculent immédiatement.
+        Montants en {uniteMonetaire}.{"\u00a0"}
       </p>
       <div className="mt-4 overflow-x-auto border border-border bg-card">
         <table className="w-full min-w-[1100px] border-collapse text-sm">
