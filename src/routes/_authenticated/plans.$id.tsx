@@ -47,6 +47,7 @@ function PageAssistant() {
   const enregistrer = useServerFn(enregistrerPlan);
 
   const [etape, setEtape] = useState(1);
+  const [nom, setNom] = useState("");
   const [exercice, setExercice] = useState(new Date().getFullYear());
   const [periode, setPeriode] = useState("Janvier-Décembre");
   const [uniteMonetaire, setUniteMonetaire] = useState("FCFA");
@@ -67,6 +68,7 @@ function PageAssistant() {
 
   useEffect(() => {
     if (!plan) return;
+    setNom(plan.nom ?? "");
     setExercice(plan.exercice);
     setPeriode(plan.periode);
     setUniteMonetaire(plan.unite_monetaire);
@@ -87,6 +89,7 @@ function PageAssistant() {
       enregistrer({
         data: {
           id,
+          nom: nom.trim() || `Plan ${exercice}`,
           exercice,
           periode,
           unite_monetaire: uniteMonetaire,
@@ -148,7 +151,7 @@ function PageAssistant() {
       <div className="sans-impression mx-auto flex max-w-[1400px] flex-wrap items-end justify-between gap-3 px-6 py-6">
         <div>
           <h1 className="font-serif text-2xl font-bold text-primary">
-            Plan de trésorerie — Exercice {exercice}
+            {nom || `Plan de trésorerie — Exercice ${exercice}`}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Étape {String(etape).padStart(2, "0")} · {ETAPES[etape - 1]} ·{" "}
@@ -181,6 +184,15 @@ function PageAssistant() {
               I — Informations générales
             </h2>
             <div className="mt-5 space-y-5 border border-border bg-card p-6">
+              <div className="space-y-2">
+                <Label htmlFor="nom">Nom du plan</Label>
+                <Input
+                  id="nom"
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  placeholder={`Plan ${exercice}`}
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="exercice">Exercice</Label>
                 <Input

@@ -7,6 +7,7 @@ const grilleSchema = z.array(z.array(z.number()));
 
 const planSchema = z.object({
   id: z.string().uuid(),
+  nom: z.string().trim().min(1).max(160),
   exercice: z.number().int().min(2000).max(2100),
   periode: z.string().min(1).max(120),
   unite_monetaire: z.string().min(1).max(20),
@@ -18,14 +19,14 @@ const planSchema = z.object({
 });
 
 const COLONNES =
-  "id, exercice, periode, unite_monetaire, institution, solde_initial, statut, encaissements, decaissements, created_at, updated_at";
+  "id, nom, exercice, periode, unite_monetaire, institution, solde_initial, statut, encaissements, decaissements, created_at, updated_at";
 
 export const listerPlans = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("plans_tresorerie")
-      .select("id, exercice, periode, statut, updated_at, unite_monetaire")
+      .select("id, nom, exercice, periode, statut, updated_at, unite_monetaire")
       .order("exercice", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
@@ -46,14 +47,20 @@ export const chargerPlan = createServerFn({ method: "GET" })
 
 export const creerPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { exercice: number }) =>
-    z.object({ exercice: z.number().int().min(2000).max(2100) }).parse(input),
+  .inputValidator((input: { exercice: number; nom?: string | undefined }) =>
+    z
+      .object({
+        exercice: z.number().int().min(2000).max(2100),
+        nom: z.string().trim().min(1).max(160).optional(),
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { data: plan, error } = await context.supabase
       .from("plans_tresorerie")
       .insert({
         user_id: context.userId,
+        nom: data.nom ?? `Plan ${data.exercice}`,
         exercice: data.exercice,
         periode: "Janvier-Décembre",
         unite_monetaire: "FCFA",
@@ -101,6 +108,7 @@ export const dupliquerPlan = createServerFn({ method: "POST" })
       .from("plans_tresorerie")
       .insert({
         user_id: context.userId,
+        nom: `${source.nom} (copie ${data.exercice})`,
         exercice: data.exercice,
         periode: source.periode,
         unite_monetaire: source.unite_monetaire,
@@ -123,4 +131,20 @@ export const supprimerPlan = createServerFn({ method: "POST" })
     const { error } = await context.supabase.from("plans_tresorerie").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export const renommerPlan = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string; nom: string }) =>
+    z.object({ id: z.string().uuid(), nom: z.string().trim().min(1).max(160) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: plan, error } = await context.supabase
+      .from("plans_tresorerie")
+      .update({ nom: data.nom })
+      .eq("id", data.id)
+      .select(COLONNES)
+      .single();
+    if (error) throw new Error(error.message);
+    return plan;
   });

@@ -22,6 +22,7 @@ export type Database = {
           exercice: number
           id: string
           institution: string
+          nom: string
           periode: string
           solde_initial: number
           statut: string
@@ -36,6 +37,7 @@ export type Database = {
           exercice: number
           id?: string
           institution?: string
+          nom?: string
           periode?: string
           solde_initial?: number
           statut?: string
@@ -50,6 +52,7 @@ export type Database = {
           exercice?: number
           id?: string
           institution?: string
+          nom?: string
           periode?: string
           solde_initial?: number
           statut?: string
