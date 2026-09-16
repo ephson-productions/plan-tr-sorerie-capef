@@ -25,8 +25,7 @@ export function TableauSituation({
         <>
           <h2 className="font-serif text-xl font-bold text-primary">III — Situation de trésorerie</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Tableau entièrement calculé{uniteMonetaire ? ` en ${uniteMonetaire}` : ""} : le solde
-            cumulé de chaque mois devient le solde initial du mois suivant.
+            Le solde cumulé de chaque mois devient le solde initial du mois suivant.
           </p>
         </>
       )}
