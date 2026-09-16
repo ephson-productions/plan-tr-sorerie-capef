@@ -7,6 +7,7 @@ const grilleSchema = z.array(z.array(z.number()));
 
 const planSchema = z.object({
   id: z.string().uuid(),
+  nom: z.string().trim().min(1).max(160),
   exercice: z.number().int().min(2000).max(2100),
   periode: z.string().min(1).max(120),
   unite_monetaire: z.string().min(1).max(20),
