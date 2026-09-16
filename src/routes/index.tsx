@@ -75,10 +75,10 @@ function PageConnexion() {
           className="mx-auto mb-5 h-32 w-auto object-contain"
         />
         <p className="text-center text-xs font-medium tracking-[0.2em] text-accent uppercase">
-          République du Cameroun
+          {"\n"}
         </p>
         <h1 className="mt-3 text-center font-serif text-2xl leading-tight font-bold text-primary">
-          Plan de Trésorerie CAPEF
+          Plan de Trésorerie&nbsp;
         </h1>
         <p className="mt-2 text-center text-sm text-muted-foreground">
           Chambre d'Agriculture, des Pêches, de l'Élevage et des Forêts du Cameroun
@@ -86,7 +86,7 @@ function PageConnexion() {
 
         <form onSubmit={modeOubli ? reinitialiser : seConnecter} className="mt-8 space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Adresse électronique</Label>
+            <Label htmlFor="email">Identifiant</Label>
             <Input
               id="email"
               type="email"
@@ -130,7 +130,7 @@ function PageConnexion() {
         </form>
 
         <p className="mt-8 border-t border-border pt-4 text-center text-xs text-muted-foreground">
-          Accès réservé. Les comptes sont créés par l'administration de la CAPEF.
+          Accès réservé. Veuillez Contacter l'Administrateur Système
         </p>
         <p className="mt-2 text-center text-xs text-muted-foreground">
           <Link to="/reset-password" className="underline-offset-4 hover:underline">
