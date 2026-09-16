@@ -3,7 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { creerPlan, dupliquerPlan, listerPlans, supprimerPlan } from "@/lib/plans.functions";
+import {
+  creerPlan,
+  dupliquerPlan,
+  listerPlans,
+  renommerPlan,
+  supprimerPlan,
+} from "@/lib/plans.functions";
 import { EnTeteApplication } from "@/components/EnTeteApplication";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,9 +37,13 @@ function PageListePlans() {
   const creer = useServerFn(creerPlan);
   const dupliquer = useServerFn(dupliquerPlan);
   const supprimer = useServerFn(supprimerPlan);
+  const renommer = useServerFn(renommerPlan);
 
   const anneeCourante = new Date().getFullYear();
   const [nouvelExercice, setNouvelExercice] = useState(String(anneeCourante));
+  const [nouveauNom, setNouveauNom] = useState("");
+  const [idEnEdition, setIdEnEdition] = useState<string | null>(null);
+  const [nomEnEdition, setNomEnEdition] = useState("");
 
   const { data: plans, isLoading } = useQuery({
     queryKey: ["plans"],
@@ -41,7 +51,7 @@ function PageListePlans() {
   });
 
   const creation = useMutation({
-    mutationFn: (exercice: number) => creer({ data: { exercice } }),
+    mutationFn: (variables: { exercice: number; nom?: string }) => creer({ data: variables }),
     onSuccess: (plan) => {
       queryClient.invalidateQueries({ queryKey: ["plans"] });
       if (plan) navigate({ to: "/plans/$id", params: { id: plan.id } });
@@ -56,6 +66,16 @@ function PageListePlans() {
       toast.success("Plan dupliqué.");
     },
     onError: () => toast.error("Duplication impossible."),
+  });
+
+  const renommage = useMutation({
+    mutationFn: (variables: { id: string; nom: string }) => renommer({ data: variables }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
+      setIdEnEdition(null);
+      toast.success("Plan renommé.");
+    },
+    onError: () => toast.error("Renommage impossible."),
   });
 
   const suppression = useMutation({
@@ -90,8 +110,23 @@ function PageListePlans() {
               className="w-40"
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="nom">Nom du plan</Label>
+            <Input
+              id="nom"
+              value={nouveauNom}
+              onChange={(e) => setNouveauNom(e.target.value)}
+              placeholder={`Plan ${nouvelExercice}`}
+              className="w-72"
+            />
+          </div>
           <Button
-            onClick={() => creation.mutate(Number(nouvelExercice))}
+            onClick={() =>
+              creation.mutate({
+                exercice: Number(nouvelExercice),
+                nom: nouveauNom.trim() || undefined,
+              })
+            }
             disabled={creation.isPending}
           >
             Nouveau plan
@@ -102,6 +137,7 @@ function PageListePlans() {
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="border-b border-border bg-secondary text-left">
+                <th className="px-4 py-3 font-semibold text-primary">Nom du plan</th>
                 <th className="px-4 py-3 font-semibold text-primary">Exercice</th>
                 <th className="px-4 py-3 font-semibold text-primary">Période</th>
                 <th className="px-4 py-3 font-semibold text-primary">Statut</th>
@@ -112,21 +148,63 @@ function PageListePlans() {
             <tbody>
               {isLoading && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-muted-foreground">
+                  <td colSpan={6} className="px-4 py-6 text-muted-foreground">
                     Chargement…
                   </td>
                 </tr>
               )}
               {!isLoading && (plans?.length ?? 0) === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-muted-foreground">
+                  <td colSpan={6} className="px-4 py-6 text-muted-foreground">
                     Aucun plan enregistré pour le moment.
                   </td>
                 </tr>
               )}
               {plans?.map((plan) => (
                 <tr key={plan.id} className="border-b border-border last:border-0">
-                  <td className="px-4 py-3 font-medium">{plan.exercice}</td>
+                  <td className="px-4 py-3 font-medium">
+                    {idEnEdition === plan.id ? (
+                      <div className="flex items-center gap-2">
+                        <Input
+                          autoFocus
+                          value={nomEnEdition}
+                          onChange={(e) => setNomEnEdition(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && nomEnEdition.trim()) {
+                              renommage.mutate({ id: plan.id, nom: nomEnEdition.trim() });
+                            }
+                            if (e.key === "Escape") setIdEnEdition(null);
+                          }}
+                          className="h-9 w-56"
+                        />
+                        <Button
+                          size="sm"
+                          disabled={renommage.isPending || !nomEnEdition.trim()}
+                          onClick={() =>
+                            renommage.mutate({ id: plan.id, nom: nomEnEdition.trim() })
+                          }
+                        >
+                          Valider
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setIdEnEdition(null)}>
+                          Annuler
+                        </Button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="text-left underline decoration-dotted underline-offset-4 hover:text-accent"
+                        title="Cliquer pour renommer"
+                        onClick={() => {
+                          setIdEnEdition(plan.id);
+                          setNomEnEdition(plan.nom ?? "");
+                        }}
+                      >
+                        {plan.nom || `Plan ${plan.exercice}`}
+                      </button>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">{plan.exercice}</td>
                   <td className="px-4 py-3">{plan.periode}</td>
                   <td className="px-4 py-3">
                     <span
@@ -153,6 +231,16 @@ function PageListePlans() {
                         onClick={() => navigate({ to: "/plans/$id", params: { id: plan.id } })}
                       >
                         Ouvrir
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setIdEnEdition(plan.id);
+                          setNomEnEdition(plan.nom ?? "");
+                        }}
+                      >
+                        Renommer
                       </Button>
                       <Button
                         size="sm"
