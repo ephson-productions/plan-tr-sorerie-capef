@@ -25,6 +25,8 @@ export const Route = createFileRoute("/_authenticated/plans/")({
       },
       { property: "og:title", content: "Mes plans de trésorerie — CAPEF" },
       { property: "og:description", content: "Gestion des exercices de trésorerie de la CAPEF." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: PageListePlans,
