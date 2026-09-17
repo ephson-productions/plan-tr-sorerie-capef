@@ -19,6 +19,8 @@ export const Route = createFileRoute("/reset-password")({
         property: "og:description",
         content: "Réinitialisation du mot de passe d'accès à l'outil de trésorerie de la CAPEF.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

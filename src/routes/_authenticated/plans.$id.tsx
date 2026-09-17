@@ -35,6 +35,8 @@ export const Route = createFileRoute("/_authenticated/plans/$id")({
         property: "og:description",
         content: "Préparation en cinq étapes du plan de trésorerie annuel de la CAPEF.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: PageAssistant,

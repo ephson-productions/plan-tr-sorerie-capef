@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { PiedDePage } from "@/components/PiedDePage";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -139,8 +140,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col">
+        <div className="flex flex-1 flex-col [&>div]:!min-h-0 [&>div]:flex-1 [&>main]:!min-h-0 [&>main]:flex-1">
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </div>
+        <PiedDePage />
+      </div>
       <Toaster position="top-right" />
     </QueryClientProvider>
   );
