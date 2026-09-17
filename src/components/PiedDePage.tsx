@@ -12,9 +12,15 @@ export function PiedDePage() {
           />
           <span className="hidden h-8 w-px bg-primary-foreground/25 sm:block" aria-hidden="true" />
           <p className="text-center text-sm text-primary-foreground/80 sm:text-left">
-            © 2026 Ephson Industries
+            © 2026 Ephson Industries™
           </p>
         </div>
+         © 2026 Ephson Industries™       
+
+         Terms
+         Privacy
+         Security
+         Status
       </div>
     </footer>
   );
